@@ -1,0 +1,78 @@
+experiment:
+  id: BASELINE-01
+  task: classification
+  dataset_version: dataset-pilot-v1
+  purpose: >-
+    Determine whether meaningful visual-class signal exists before expanding
+    the dataset.
+
+data:
+  train: dataset/pilot_v1/train
+  val: dataset/pilot_v1/val
+  test: dataset/pilot_v1/test
+  num_classes: 5
+  classes:
+    - uniform_finish
+    - patchy_undercoverage
+    - drip_sag_overwet
+    - wet_reflective_hard_negative
+    - real_painting_context
+
+model:
+  name: PLATFORM_SELECTION_REQUIRED
+  selection_requirements:
+    - small pretrained image classifier
+    - transfer learning
+    - nano, mobile, or otherwise lightweight architecture preferred
+  excluded:
+    - large foundation model
+    - segmentation model
+    - object detection model
+
+training:
+  pretrained: true
+  input_size: 224
+  epochs_max: 60
+  early_stopping: true
+  patience: 15
+  batch_size: auto
+  optimizer: AdamW
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  class_weighting: OPTIONAL_PLATFORM_DEPENDENT
+
+augmentation:
+  policy: mild_realistic_only
+  allowed:
+    horizontal_flip: small_where_semantically_safe
+    crop_scale: small
+    brightness: mild
+    contrast: mild
+    saturation: mild
+    rotation: very_small
+  excluded:
+    - extreme_hue_shift
+    - heavy_blur
+    - vertical_flip
+    - strong_geometric_distortion
+    - aggressive_cutmix_or_mixup
+    - synthetic_defects
+
+evaluation:
+  use_test_during_training: false
+  test_role: final_holdout_after_configuration_freeze
+  save_confusion_matrix: true
+  save_per_class_metrics: true
+  report_macro_precision: true
+  report_macro_recall: true
+  report_macro_f1: true
+  report_support_per_class: true
+  report_misclassified_filenames: true
+  critical_comparisons:
+    - uniform_finish_vs_patchy_undercoverage
+    - drip_sag_overwet_vs_wet_reflective_hard_negative
+    - real_painting_context_shortcut_check
+
+platform:
+  actual_settings_confirmation_required: true
+  unsupported_settings_policy: record_nearest_available_setting_without_claiming_exact_support

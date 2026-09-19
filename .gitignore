@@ -28,6 +28,9 @@ venv/
 training/results/*
 !training/results/.gitkeep
 
+# External training-platform upload copies
+training/platform_upload/
+
 # secrets
 .env
 .env.*
