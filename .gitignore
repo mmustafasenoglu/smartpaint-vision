@@ -1,0 +1,35 @@
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Flutter / Dart
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ML artifacts
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.litert
+*.engine
+
+# experiment output
+training/results/*
+!training/results/.gitkeep
+
+# secrets
+.env
+.env.*
+*.key
+credentials.json
